@@ -55,6 +55,7 @@ class HolidayRoutes : RouteBuilder() {
                 .setHeader("CamelSpringWebserviceSoapAction", constant("http://www.holidaywebservice.com/HolidayService_v2/GetCountriesAvailable"))
 //                .to("spring-ws:http://www.holidaywebservice.com//HolidayService_v2/HolidayService2.asmx?soapAction=http://www.holidaywebservice.com/HolidayService_v2/GetCountriesAvailable")
                 .to("spring-ws:http://www.holidaywebservice.com//HolidayService_v2/HolidayService2.asmx")
+//                .setBody(xpath("//*:Code[1]")) //not working check dependencies
                 .log("Camel body: \${body.class} \${body}")
     }
 }
