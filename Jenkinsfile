@@ -13,7 +13,7 @@ pipeline {
       when {
         expression {
           openshift.withCluster() {
-            return !openshift.selector("bc", "camel").exists();
+            return !openshift.selector("bc", "camel-demo").exists();
           }
         }
       }
