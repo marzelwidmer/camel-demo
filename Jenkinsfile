@@ -1,3 +1,4 @@
+// see : https://blog.openshift.com/building-declarative-pipelines-openshift-dsl-plugin/
 pipeline {
   agent {
       label 'maven'
@@ -12,14 +13,14 @@ pipeline {
       when {
         expression {
           openshift.withCluster() {
-            return !openshift.selector("bc", "mapit").exists();
+            return !openshift.selector("bc", "camel").exists();
           }
         }
       }
       steps {
         script {
           openshift.withCluster() {
-            openshift.newBuild("--name=mapit", "--image-stream=redhat-openjdk18-openshift:1.1", "--binary")
+            openshift.newBuild("--name=camel", "--image-stream=redhat-openjdk18-openshift:1.1", "--binary")
           }
         }
       }
@@ -28,7 +29,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.selector("bc", "mapit").startBuild("--from-file=target/mapit-spring.jar", "--wait")
+            openshift.selector("bc", "camel").startBuild("--from-file=target/camel-0.0.1-SNAPSHOT.jar", "--wait")
           }
         }
       }
@@ -37,7 +38,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.tag("mapit:latest", "mapit:dev")
+            openshift.tag("camel:latest", "camel:dev")
           }
         }
       }
@@ -46,14 +47,14 @@ pipeline {
       when {
         expression {
           openshift.withCluster() {
-            return !openshift.selector('dc', 'mapit-dev').exists()
+            return !openshift.selector('dc', 'camel-dev').exists()
           }
         }
       }
       steps {
         script {
           openshift.withCluster() {
-            openshift.newApp("mapit:latest", "--name=mapit-dev").narrow('svc').expose()
+            openshift.newApp("camel:latest", "--name=camel-dev").narrow('svc').expose()
           }
         }
       }
@@ -62,7 +63,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.tag("mapit:dev", "mapit:stage")
+            openshift.tag("camel:dev", "camel:stage")
           }
         }
       }
@@ -71,14 +72,14 @@ pipeline {
       when {
         expression {
           openshift.withCluster() {
-            return !openshift.selector('dc', 'mapit-stage').exists()
+            return !openshift.selector('dc', 'camel-stage').exists()
           }
         }
       }
       steps {
         script {
           openshift.withCluster() {
-            openshift.newApp("mapit:stage", "--name=mapit-stage").narrow('svc').expose()
+            openshift.newApp("camel:stage", "--name=camel-stage").narrow('svc').expose()
           }
         }
       }
