@@ -20,7 +20,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.newBuild("--name=camel", "--image-stream=redhat-openjdk18-openshift:1.1", "--binary")
+            openshift.newBuild("--name=camel-demo", "--image-stream=redhat-openjdk18-openshift:1.1", "--binary")
           }
         }
       }
@@ -29,7 +29,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.selector("bc", "camel").startBuild("--from-file=target/camel-0.0.1-SNAPSHOT.jar", "--wait")
+            openshift.selector("bc", "camel-demo").startBuild("--from-file=target/camel-0.0.1-SNAPSHOT.jar", "--wait")
           }
         }
       }
@@ -38,7 +38,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.tag("camel:latest", "camel:dev")
+            openshift.tag("camel-demo:latest", "camel-demo:dev")
           }
         }
       }
@@ -47,14 +47,14 @@ pipeline {
       when {
         expression {
           openshift.withCluster() {
-            return !openshift.selector('dc', 'camel-dev').exists()
+            return !openshift.selector('dc', 'camel-demo-dev').exists()
           }
         }
       }
       steps {
         script {
           openshift.withCluster() {
-            openshift.newApp("camel:latest", "--name=camel-dev").narrow('svc').expose()
+            openshift.newApp("camel-demo:latest", "--name=camel-demo-dev").narrow('svc').expose()
           }
         }
       }
@@ -63,7 +63,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.tag("camel:dev", "camel:stage")
+            openshift.tag("camel-demo:dev", "camel-demo:stage")
           }
         }
       }
@@ -72,14 +72,14 @@ pipeline {
       when {
         expression {
           openshift.withCluster() {
-            return !openshift.selector('dc', 'camel-stage').exists()
+            return !openshift.selector('dc', 'camel-demo-stage').exists()
           }
         }
       }
       steps {
         script {
           openshift.withCluster() {
-            openshift.newApp("camel:stage", "--name=camel-stage").narrow('svc').expose()
+            openshift.newApp("camel-demo:stage", "--name=camel-demo-stage").narrow('svc').expose()
           }
         }
       }
