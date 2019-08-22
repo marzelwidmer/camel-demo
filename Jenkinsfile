@@ -29,7 +29,7 @@ pipeline {
       steps {
         script {
           openshift.withCluster() {
-            openshift.selector("bc", "camel-demo").startBuild("--from-file=target/camel-0.0.1-SNAPSHOT.jar", "--wait")
+            openshift.selector("bc", "camel-demo").startBuild("--from-file=target/camel-demo.jar", "--wait")
           }
         }
       }
