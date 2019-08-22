@@ -1,19 +1,30 @@
 pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      stage('Checkout') {
-          checkout scm
-        }
+    agent any
+    stages {
         stage('Build') {
-          sh 'mvn install'
-        }
-        stage('Unit Test') {
-          sh 'mvn test'
+            steps {
+               echo 'This is a minimal pipeline.'
+            }
         }
     }
-  }
 }
+
+// pipeline {
+//   agent any
+//   stages {
+//     stage('Build') {
+//       stage('Checkout') {
+//           checkout scm
+//         }
+//         stage('Build') {
+//           sh 'mvn install'
+//         }
+//         stage('Unit Test') {
+//           sh 'mvn test'
+//         }
+//     }
+//   }
+// }
 
 
 // pipeline {
