@@ -7,6 +7,13 @@ import org.springframework.boot.runApplication
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.apache.camel.Exchange
+import org.apache.camel.builder.ProcessorBuilder.setHeader
+import org.apache.camel.builder.ProcessorBuilder.setHeader
+
+
+
+
 
 @SpringBootApplication
 class CamelApplication
@@ -57,6 +64,8 @@ class HolidayRoutes : RouteBuilder() {
                 .to("spring-ws:http://www.holidaywebservice.com//HolidayService_v2/HolidayService2.asmx")
 //                .setBody(xpath("//*:Code[1]")) //not working check dependencies
                 .log("Camel body: \${body.class} \${body}")
+                .transform().simple("Hello Camel")
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
     }
 }
 

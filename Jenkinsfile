@@ -9,6 +9,9 @@ pipeline {
         sh "mvn install"
       }
     }
+
+//     oc new-app fabric8/s2i-java:latest-java11~https://github.com/marzelwidmer/camel-demo; oc expose svc/camel-demo; oc get route camel-demo
+
     stage('Create Image Builder') {
       when {
         expression {
